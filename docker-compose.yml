@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  api:
+    build: .
+    volumes:
+      - ./:/api
+    ports:
+      - 8080:8080
+    working_dir: /api
+    command: "cargo run"
+  
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: rust_dock_lab
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+volumes:
+  postgres_data:
