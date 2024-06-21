@@ -1,27 +1,15 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, App, HttpServer};
+use crate::handlers::{hello, echo, manual_hello};
 
-#[get("/")]
-async fn hello() -> impl Responder {
-    println!("asdfasdfasdfasdf");
-    HttpResponse::Ok().body("Hello world!")
-}
-
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
-
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
-}
+mod handlers;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
-            .service(hello)
-            .service(echo)
-            .route("/hey", web::get().to(manual_hello))
+            .service(hello::hello)
+            .service(echo::echo)
+            .route("/hey", web::get().to(manual_hello::manual_hello))
     })
     .bind(("0.0.0.0", 8080))?
     .run()
